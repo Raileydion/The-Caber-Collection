@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Caber Collection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+            background: #f5f5f5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #222;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .item {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            width: 200px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, border-color 0.3s;
+        }
+
+        .item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            background-color: #e0e0e0;
+            border-color: #bbb;
+        }
+
+        .item img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #222;
+            color: #fff;
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        button.cancel {
+            background-color: #555;
+        }
+
+        button.cancel:hover {
+            background-color: #777;
+        }
+
+        .cart-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #000;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            z-index: 1001;
+            transition: background-color 0.3s;
+        }
+
+        .cart-button:hover {
+            background-color: #222;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+        }
+
+        .modal, .cart {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            background-color: #fff;
+            color: #333;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal h2, .cart h2 {
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            color: #111;
+        }
+
+        .quantity-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #quantity {
+            width: 50px;
+            padding: 5px;
+            font-size: 1em;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .size-options {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .size-button {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #ddd;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .size-button:hover {
+            background-color: #e0e0e0;
+            
+        }
+
+        .size-button.selected {
+            border: 2px solid green;
+        }
+
+        .color-selection-img {
+        width: 80px; 
+        height: 80px; 
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Caber Collection</h1>
+        
+        <div class="item" onclick="selectItem('Puma Speedcat', 7100, 'https://tinyurl.com/mszjmdmy', ['https://tinyurl.com/mszjmdmy', 'https://tinyurl.com/rh38xn7v', 'https://tinyurl.com/yp9jetzz', 'https://tinyurl.com/mv2xudhr'])">
+            <img src="https://tinyurl.com/mszjmdmy" alt="Puma Speedcat"">
+            <p><strong>Puma Speedcat</strong></p>
+            <p>₱ 7,100.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('Adidas Gazelle', 7300, 'https://tinyurl.com/2u3ezy6y', ['https://tinyurl.com/2u3ezy6y', 'https://tinyurl.com/4x4mjd6d', 'https://tinyurl.com/2p8mfxde', 'https://rb.gy/5ph8x8'])">
+            <img src="https://tinyurl.com/2u3ezy6y" alt="Adidas Gazelle" style="transform: scaleX(-1);">
+            <p><strong>Adidas Gazelle</strong></p>
+            <p>₱ 7,300.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('Onitsuka Tiger Mexico 66', 8500, 'https://autokicksph.com/cdn/shop/files/main-square_540x_e1033491-de73-4621-aea2-bf511be869de.webp?v=1709273459', ['https://autokicksph.com/cdn/shop/files/main-square_540x_e1033491-de73-4621-aea2-bf511be869de.webp?v=1709273459', 'https://autokicksph.com/cdn/shop/files/main-square_540x_b6039bb8-8a24-4051-af31-6fe23bb8ae42.webp?v=1709274147', 'https://autokicksph.com/cdn/shop/files/main-square_540x_48cdc174-573d-4b6c-a095-c660acfe5a59.webp?v=1709273774', 'https://autokicksph.com/cdn/shop/files/main-square_540x_e4196f9e-de89-47fb-b814-e7f9e2f1d134.webp?v=1709274001'])">
+            <img src="https://autokicksph.com/cdn/shop/files/main-square_540x_e1033491-de73-4621-aea2-bf511be869de.webp?v=1709273459" alt="Onitsuka Tiger Mexico 66" >
+            <p><strong>Onitsuka Tiger Mexico 66</strong></p>
+            <p>₱ 8,500.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('Clarks Wallabee', 8800, 'https://cdn.media.amplience.net/i/clarks/26179164_GW_1?fmt=auto&img404=imageNotFound&w=2088&qlt=default', ['https://cdn.media.amplience.net/i/clarks/26179164_GW_1?fmt=auto&img404=imageNotFound&w=2088&qlt=default', 'https://cdn.media.amplience.net/i/clarks/26174049_GW_1?fmt=auto&img404=imageNotFound&w=2088&qlt=default', 'https://cdn.media.amplience.net/i/clarks/26155515_GW_1?fmt=auto&img404=imageNotFound&w=2088&qlt=default', 'https://cdn.media.amplience.net/i/clarks/26179159_GW_1?fmt=auto&img404=imageNotFound&w=2088&qlt=default'])">
+            <img src="https://cdn.media.amplience.net/i/clarks/26179164_GW_1?fmt=auto&img404=imageNotFound&w=2088&qlt=default" alt="Clarks Wallabee" style="transform: scaleX(-1);">
+            <p><strong>Clarks Wallabee</strong></p>
+            <p>₱ 8,800.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('New Balance 1906R', 9000, 'https://nb.scene7.com/is/image/NB/m1906rer_nb_02_i?$pdpflexf2$&qlt=80&fmt=webp&wid=440&hei=440', ['https://nb.scene7.com/is/image/NB/m1906rer_nb_02_i?$pdpflexf2$&qlt=80&fmt=webp&wid=440&hei=440', 'https://nb.scene7.com/is/image/NB/m1906rem_nb_02_i?$pdpflexf2$&qlt=80&fmt=webp&wid=440&hei=440', 'https://nb.scene7.com/is/image/NB/m1906ree_nb_02_i?$pdpflexf2$&qlt=80&fmt=webp&wid=440&hei=440', 'https://nb.scene7.com/is/image/NB/m1906ra_nb_02_i?$pdpflexf2$&qlt=80&fmt=webp&wid=440&hei=440'])">
+            <img src="https://nb.scene7.com/is/image/NB/m1906rer_nb_02_i?$pdpflexf2$&qlt=80&fmt=webp&wid=440&hei=440" alt="New Balance 1906R" style="transform: scaleX(-1);">
+            <p><strong>New Balance 1906R</strong></p>
+            <p>₱ 9,000.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('Birkenstock Boston Clogs', 11990, 'https://www.birkenstock.com/dw/image/v2/BBBF_PRD/on/demandware.static/-/Sites-master-catalog/default/dw4c30b7c1/560771/560771_side.jpg?sw=848&sh=848&strip=false', ['https://www.birkenstock.com/dw/image/v2/BBBF_PRD/on/demandware.static/-/Sites-master-catalog/default/dw4c30b7c1/560771/560771_side.jpg?sw=848&sh=848&strip=false', 'https://www.birkenstock.com/dw/image/v2/BBBF_PRD/on/demandware.static/-/Sites-master-catalog/default/dw0675a68b/660473/660473_side.jpg?sw=848&sh=848&strip=false', 'https://www.birkenstock.com/dw/image/v2/BBBF_PRD/on/demandware.static/-/Sites-master-catalog/default/dwcfc5737e/1028753/1028753_side.jpg?sw=848&sh=848&strip=false', 'https://www.birkenstock.com/dw/image/v2/BBBF_PRD/on/demandware.static/-/Sites-master-catalog/default/dw9d18e62f/1026769/1026769_side.jpg?sw=848&sh=848&strip=false'])">
+            <img src="https://www.birkenstock.com/dw/image/v2/BBBF_PRD/on/demandware.static/-/Sites-master-catalog/default/dw4c30b7c1/560771/560771_side.jpg?sw=848&sh=848&strip=false" alt="Birkenstock Boston Clogs" style="transform: scaleX(-1); width: 90%; height: 50%;">
+            <p><strong>Birkenstock Boston Clogs</strong></p>
+            <p>₱ 11,990.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('Ugg Tasman', 6500, 'https://tinyurl.com/mszjmdmy', ['https://dms.deckers.com/ugg/image/upload/f_auto,q_40,dpr_2/b_rgb:f4f2ee/w_483/v1729719355/5955-CHE_1.png?_s=RAABAB0', 'https://dms.deckers.com/ugg/image/upload/f_auto,q_40,dpr_2/b_rgb:f4f2ee/w_483/v1697741093/catalog/images/transparent/5955-SNDD_1.png?_s=RAABAB0', 'https://dms.deckers.com/ugg/image/upload/f_auto,q_40,dpr_2/b_rgb:f4f2ee/w_483/v1637600534/catalog/images/transparent/5955-BLK_1.png?_s=RAABAB0', 'https://dms.deckers.com/ugg/image/upload/f_auto,q_40,dpr_2/b_rgb:f4f2ee/w_483/v1677785286/catalog/images/transparent/5955-BCDR_1.png?_s=RAABAB0'])">
+            <img src="https://cdn-images.farfetch-contents.com/21/61/82/84/21618284_51528456_1000.jpg" style="transform: scaleX(-1); width: 80%; height: 40%;">
+            <p><strong>Ugg Tasman</strong></p>
+            <p>₱ 6,500.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('Asics Gel-Kayano 14', 9500, 'https://images.asics.com/is/image/asics/1203A537_101_SR_RT_GLB?$zoom$', ['https://images.asics.com/is/image/asics/1203A537_101_SR_RT_GLB?$zoom$', 'https://images.asics.com/is/image/asics/1203A540_020_SR_RT_GLB?$zoom$', 'https://images.asics.com/is/image/asics/1203A412_400_SR_RT_GLB?$zoom$', 'https://images.asics.com/is/image/asics/1203A476_200_SR_RT_GLB?$zoom$'])">
+            <img src="https://i0.wp.com/blog.afew-store.com/wp-content/uploads/2022/08/1201A457-101-01.jpg?fit=819%2C1024&ssl=1" style="transform: scaleX(-1); width: 85%; height: 40%;">
+            <p><strong>Asics Gel-Kayano 14</strong></p>
+            <p>₱ 9,500.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('Nike Air Max 95', 10395, 'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/4bf957ca-ee78-4953-a579-792ccb50a35b/custom-nike-air-max-95-by-you.png', ['https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/4bf957ca-ee78-4953-a579-792ccb50a35b/custom-nike-air-max-95-by-you.png', 'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/a8346b4f-0095-4c83-a368-73f45613499c/custom-nike-air-max-95-by-you.png', 'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/12be483b-4c9c-4264-b87f-9d1bd564bab6/custom-nike-air-max-95-by-you.png', 'https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/f946c0a5-c43d-4a68-b980-ccc4ef44feed/AIR+MAX+95+SP.png'])">
+            <img src="https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/4bf957ca-ee78-4953-a579-792ccb50a35b/custom-nike-air-max-95-by-you.png" style="width: 105%; height: 100%;">
+            <p><strong>Nike Air Max 95</strong></p>
+            <p>₱ 10,395.00</p>
+        </div>
+
+        <div class="item" onclick="selectItem('LARSON WEEJUNS LOAFER', 10300, 'https://www.ghbass.com/cdn/shop/files/GHBBA00823_1_BAZ1W002_BLK_HERO_2d515aa5-d4e1-4a76-a5a2-10be8770ca8c.jpg?v=1718917026&width=1200', ['https://www.ghbass.com/cdn/shop/files/GHBBA00823_1_BAZ1W002_BLK_HERO_2d515aa5-d4e1-4a76-a5a2-10be8770ca8c.jpg?v=1718917026&width=1200', 'https://www.ghbass.com/cdn/shop/files/GHBBA00823_2_BAZ1W002_WNE_HERO_dcfc5cfc-a968-4906-b330-14232afe6680.jpg?v=1718917087&width=1200', 'https://www.ghbass.com/cdn/shop/files/GHBBA00823_3_BAZ1W002_BLW_HERO_59708d95-9e9e-4fc3-a093-d7901b64f8a4.jpg?v=1720549920&width=1200', 'https://www.ghbass.com/cdn/shop/files/GHBBA00823_65_BAZ1W002_WSK_HERO_3f0908f2-9523-4a0e-a347-00aa577aea0f.jpg?v=1719842207&width=1200'])">
+            <img src="https://www.ghbass.com/cdn/shop/files/GHBBA00823_1_BAZ1W002_BLK_HERO_2d515aa5-d4e1-4a76-a5a2-10be8770ca8c.jpg?v=1718917026&width=1200" style="transform: scaleX(-1);">
+            <p><strong>LARSON WEEJUNS LOAFER</strong></p>
+            <p>₱ 10,300.00</p>
+        </div>
+        
+    </div>
+
+    <button class="cart-button" onclick="toggleCart()">View Cart</button>
+
+    <div class="cart" id="cart-summary">
+        <h2>Shopping Cart</h2>
+        <div id="cart-items"></div>
+        <p><strong>Grand Total: <span id="grand-total">0.00</span></strong></p>
+        <button onclick="placeOrderFromCart()">Order</button>
+        <button onclick="resetCart()">Reset Cart</button>
+        <button onclick="closeCart()">Close Cart</button>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="modal" id="order-modal">
+        <div class="modal-content">
+            <div>
+                <h2>Choose Your Color</h2>
+                <p>Selected Item: <span id="selected-item"></span></p>
+                <div id="color-options" style="display: flex; gap: 10px; justify-content: center;">
+                </div>
+                <p>Quantity: 
+                    <button onclick="updateQuantity(-1)">-</button>
+                    <span id="quantity-display">1</span>
+                    <button onclick="updateQuantity(1)">+</button>
+                </p>
+                <div class="size-options">
+                    <p id="selected-size">Size: <span id="size-display"></span></p>
+                    <button class="size-button" style="background-color: white; color: #000;" onclick="selectSize('9', this)">9</button>
+                    <button class="size-button" style="background-color: white; color: #000;" onclick="selectSize('9.5', this)">9.5</button>
+                    <button class="size-button" style="background-color: white; color: #000;" onclick="selectSize('10', this)">10</button>
+                    <button class="size-button" style="background-color: white; color: #000;" onclick="selectSize('11', this)">11</button>
+                </div>         
+                <p id="discount-info" style="display: none; color: green; font-weight: bold;">Discount: <span id="discount-amount"></span></p>
+                <p>Total Amount: <span id="total-amount">0</span></p>
+                <button class="cancel" onclick="closeModal()">Cancel</button>
+                <button onclick="addToCart()">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let selectedItem = '';
+        let selectedPrice = 0;
+        let selectedImage = '';
+        let selectedColor = '';
+        let selectedQuantity = 1;
+        let selectedSize = '';
+
+        function selectSize(size) {
+            selectedSize = size;
+            document.getElementById('size-display').textContent = size;
+        }
+
+        function placeOrderFromCart() {
+            const item = document.getElementById('selected-item').textContent;
+            const quantity = document.getElementById('quantity-display').textContent;
+            
+            alert(`You ordered: ${item} \nSize: ${selectedSize} \nQuantity: ${quantity}`);     
+        }
+
+        function selectItem(item, price, defaultImage, colors) {
+            selectedItem = item;
+            selectedPrice = price;
+            selectedImage = defaultImage;
+            selectedColor = '';
+            selectedQuantity = 1;
+            document.getElementById('selected-item').innerText = item;
+            document.getElementById('quantity-display').innerText = 1; 
+            document.getElementById('color-options').innerHTML = '';
+
+            colors.forEach((colorImage, index) => {
+                const colorImg = document.createElement('img');
+                colorImg.src = colorImage;
+                colorImg.alt = `${item} Color ${index + 1}`;
+                colorImg.style.width = '100px';
+                colorImg.style.height = '100px';
+                colorImg.style.cursor = 'pointer';
+                colorImg.style.border = selectedColor === colorImage ? '2px solid green' : '1px solid #ddd';
+
+                colorImg.onclick = function() {
+                    selectedColor = colorImage;
+                    selectedImage = colorImage;
+                    document.getElementById('color-options').childNodes.forEach(img => img.style.border = '1px solid #ddd');
+                    colorImg.style.border = '2px solid green';
+                    calculateTotal();
+                };
+
+                document.getElementById('color-options').appendChild(colorImg);
+            });
+
+            calculateTotal();
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('order-modal').style.display = 'block';
+        }
+
+        function selectSize(size, element) {
+            selectedSize = size;
+            document.getElementById('size-display').textContent = size;
+
+            const buttons = document.querySelectorAll('.size-button');
+            buttons.forEach(button => button.classList.remove('selected'));
+
+            element.classList.add('selected');
+        }
+        
+        function updateQuantity(amount) {
+            selectedQuantity = Math.max(1, selectedQuantity + amount);
+            document.getElementById('quantity-display').innerText = selectedQuantity;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            if (!selectedColor) {
+                document.getElementById('total-amount').innerText = "Select a color to view the total";
+                document.getElementById('discount-info').style.display = 'none';
+                return;
+            }
+
+            let total = selectedQuantity * selectedPrice;
+            let discount = 0;
+
+            if (selectedQuantity >= 3) {
+                discount = total * 0.10;
+                total -= discount;
+                document.getElementById('discount-info').style.display = 'block';
+                document.getElementById('discount-amount').innerText = `10% off (₱${discount.toFixed(2)})`;
+            } else {
+                document.getElementById('discount-info').style.display = 'none';
+            }
+
+            document.getElementById('total-amount').innerText = `₱${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+        }
+
+
+
+        function addToCart() {
+            if (!selectedColor) {
+                alert('Please select a color.');
+                return;
+            }
+
+            const item = {
+                name: selectedItem,
+                price: selectedPrice,
+                quantity: selectedQuantity,
+                size: selectedSize,
+                color: selectedColor,
+                total: selectedQuantity * selectedPrice
+            };
+
+            if (selectedQuantity >= 2) {
+                item.total -= item.total * 0.10;
+            }
+
+            cart.push(item);
+            alert(`${selectedItem} added to cart!`);
+            closeModal();
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            cartItemsDiv.style.textAlign = 'left';
+            cartItemsDiv.innerHTML = '';
+            let grandTotal = 0;
+
+            cart.forEach((item, index) => {
+                const cartItemDiv = document.createElement('div');
+                cartItemDiv.classList.add('cart-item');
+                cartItemDiv.style.textAlign = 'left'; 
+                cartItemDiv.innerHTML = `
+                    <p><strong>${item.name}</strong></p>
+                    <p>Color: <br><br><img src="${item.color}" alt="Color" style="width: 20%; height: 20%; border-radius: 5px;"></p>
+                    <p>Size: ${item.size}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                    <p>Item Total: ₱${item.total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
+                `;
+                cartItemsDiv.appendChild(cartItemDiv);
+                grandTotal += item.total;
+            });
+
+            document.getElementById('grand-total').innerText = `₱${grandTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+        }
+
+
+        function placeOrderFromCart() {
+            if (cart.length === 0) {
+                alert('Your cart is empty. Please add items before placing an order.');
+                return;
+            }
+
+            // Confirmation popup for placing the order
+            const confirmOrder = confirm('Are you sure you want to place this order?');
+            if (!confirmOrder) {
+                return; // If the user selects "Cancel", exit the function
+            }
+
+            const grandTotal = document.getElementById('grand-total').innerText;
+            alert(`Thank you for your order! Your total is ${grandTotal}.`);
+
+            resetCart();
+            closeCart();
+        }
+
+    
+        function resetCart() {
+            cart = [];
+            updateCartDisplay();
+            document.getElementById('grand-total').innerText = '₱0.00';
+        }
+
+        function resetCartWithConfirmation() {
+            const confirmReset = confirm('Are you sure you want to reset your cart?');
+            if (!confirmReset) {
+                return;
+            }
+
+            resetCart();
+        }
+
+        function toggleCart() {
+            const cartModal = document.getElementById('cart-summary');
+            cartModal.style.display = cartModal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function closeCart() {
+            document.getElementById('cart-summary').style.display = 'none';
+        }
+
+        function closeModal() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('order-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
